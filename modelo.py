@@ -121,3 +121,20 @@ grid_search.fit(X_data_final,y_data_final)
 prod_final_clf=grid_search.best_estimator_
 print(prod_final_clf)
 print(prod_final_clf.score(X_data_final,y_data_final))
+
+titanic_test_data = pd.read_csv("data/test.csv")
+final_test_data= pipeline.fit_transform(titanic_test_data)
+final_test_data.info
+print(final_test_data)
+print('cima')
+
+X_final_test =final_test_data
+X_final_test= X_final_test.fillna(method="ffill")
+
+scaler=StandardScaler()
+X_data_final_test = scaler.fit_transform(X_final_test)
+
+predictions = prod_final_clf.predict(X_data_final_test)
+final_df=pd.DataFrame(titanic_test_data['PassengerId'])
+final_df['Survived'] = predictions
+final_df.to_csv("data/predictions.csv",index=False)
